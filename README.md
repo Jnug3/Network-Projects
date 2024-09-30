@@ -16,3 +16,29 @@ In this exercise, it is known that someone is attempting a brute-force attack on
 I start out by engage Sniffer mode on Snort on the *eth0* interface. The 
 
 ![Step 01](https://github.com/user-attachments/assets/fe34493e-cb1b-4958-aac5-985752000bd4)
+
+I receive the results in the console and something catches my eye. I rerun the command, this time adding the flag ```-l .``` to create a log in the directory I am in. I catch an obvious anomaly.
+
+![Step 02 1](https://github.com/user-attachments/assets/fe3ae0cb-3cdd-4c0c-a9a7-16756a28619c)
+
+As seen below, in the payload of one of the packets I see a suspicious port and details that seem to point to a hosts desktop information
+
+![Step 02](https://github.com/user-attachments/assets/b289a9fd-cb6f-4c96-bb78-d21e0ea78ab4)
+
+To confirm my findings, I search through the log using the following command: ```sudo snort -r snort.log.* | grep "4444"``` . And I see that this suspicious port can be seen in use throughout the log. Port 4444 is a common listening port for the exploitation tool, Metasploit. It would appear the network has been compromised. 
+
+My next task is to block the connection to the port to defend the network. I begin by writing a custom rule to the ```local.rules``` file in snort using the command ```sudo gedit /etc/snort/rules/local.rules```.
+
+![Step 04](https://github.com/user-attachments/assets/5a48d12a-043b-478c-9f14-6aa0b4cc98a9)
+
+The rule I craft is designed to drop any connection to tcp port 4444 in any direction. While a more fine tuned approach may be advisable, it fit withing the scope of this project.
+
+![Step 05](https://github.com/user-attachments/assets/93c3bedc-0906-4ad6-8550-c4f39f44e021)
+
+I turn on Snort's IPS mode (quietly) by running the command ```sudo snort -c /etc/snort/rules/local.rules -q -Q --daq afpacket -i eth0:eth1 -A full```. In about a minute, the success conditions are met and the flag is tripped. The attack has been stopped!
+
+
+![Step 06](https://github.com/user-attachments/assets/725a490e-fdda-49a7-b1c6-4d5ceed06025)
+
+### Lessons Learned
+Understanding the nature and nuance of Snort has helped me see the need to be vigilant at all times to protect CIA. Having a deep understanding of the tools at hand, and deploying in an efficient way is key. I look forward to continuing my development. 

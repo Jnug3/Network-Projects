@@ -108,6 +108,10 @@ This is the end of the investigation
 
 ![image](https://github.com/user-attachments/assets/0f124823-4fe0-4295-982c-aeb56227852d)
 
+The command ```cat signatures.log | zeek-cut note sig_id event_msg | nl``` is used, and it appears there have been three seperate events.
+
+![image](https://github.com/user-attachments/assets/3a76165e-b75f-4b39-b165-1dcf83decccc)
+
 **Step 02:**
 
 

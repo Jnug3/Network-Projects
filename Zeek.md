@@ -52,7 +52,7 @@ There are many connections to  *.cisco-update.com (suspicious), and each one has
 
 This concludes the first investigation.
 
-## Scenario 02: Phishing
+## Scenario 2: Phishing
 *An alert was triggered: "Phishing Attempt". The task is to investigate the PCAP and find if the event is a true positive.*
 
 **Step 01:** This time I will analyze the pcap with a Zeek script. The script is designed to find and extract any files found within the payload. The command ```zeek -Cr phishing.pcap file-extract-demo.zeek``` is used, and the log files are generated along with the folder ```extract_files```. Possibly malicious files were discovered! 
@@ -100,6 +100,15 @@ Again I defange the url for my report using CyberChef.
 ![image](https://github.com/user-attachments/assets/e049a5f4-c337-4e0d-a922-cf0bec50bccc)
 
 This is the end of the investigation
+
+## Scenario 3: Log4J
+*An alert was triggered: "Log4J Exploitation Attempt". The case was issued to me. Inspect the PCAP and retrieve artifacts to show if it is a true positive*
+
+**Step 01:** Zeek is called to examine the file ```log4shell.pcapng``` along with a script. The command used is ```zeek -Cr log4shell.pcapng detection-log4j.zeek```. The script focuses on detecting attempts to exploit the Log4j vulnerability (CVE-2021-44228), commonly referred to as Log4Shell. It has created a ```signatures.log```, signaling that at least one attempt has been discovered.
+
+![image](https://github.com/user-attachments/assets/0f124823-4fe0-4295-982c-aeb56227852d)
+
+**Step 02:**
 
 
 

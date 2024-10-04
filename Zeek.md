@@ -129,7 +129,7 @@ There are Base64 lines found. The information is copied and translated in CyberC
 
 ![image](https://github.com/user-attachments/assets/c25cfd9c-30b9-4a65-85c0-42b1da9f2ddf)
 
-These commands create a file of the destination host called "pwned." 
+These commands uses netcat to create a webshell that creates a file on the destination host called "pwned" in the ```/tmp``` directory.  
 
 This concludes the third investigation and the Zeek Exercises are complete.
 

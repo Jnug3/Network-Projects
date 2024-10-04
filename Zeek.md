@@ -55,30 +55,47 @@ This concludes the first investigation.
 ## Scenario 02: Phishing
 *An alert was triggered: "Phishing Attempt". The task is to investigate the PCAP and find if the event is a true positive.*
 
-**Step One:** This time I will analyze the pcap with a Zeek script. The script is designed to find and extract any files found within the payload. The command ```zeek -Cr phishing.pcap file-extract-demo.zeek``` is used, and the log files are generated along with the folder ```extract_files```. Possibly malicious files were discovered! 
+**Step 01:** This time I will analyze the pcap with a Zeek script. The script is designed to find and extract any files found within the payload. The command ```zeek -Cr phishing.pcap file-extract-demo.zeek``` is used, and the log files are generated along with the folder ```extract_files```. Possibly malicious files were discovered! 
 
 ![image](https://github.com/user-attachments/assets/43c89803-cb69-49ca-bc79-38d485c80b3e)
 
-**Step Two:** We will locate the suspicious source address first. 
-
+**Step 02:** We will locate the suspicious source address first. We peek into the ```conn.log``` file and see the source ip is 10[.]6[.]27[.]102
 
 ![image](https://github.com/user-attachments/assets/fd2d3867-95f8-412e-b5b1-243a5041564a)
 
+Because of its potential malicious nature, we defang the ip using CyberChef for our report.
+
 ![image](https://github.com/user-attachments/assets/047eaa46-2d2e-43e9-b2c4-8ebe0bb09330)
+
+**Step 03:** Using the command ```cat http.log | zeek-cut host uri``` we are able to locate the suspicious websites, as well as the requested file names in the log.
 
 ![image](https://github.com/user-attachments/assets/33e2a992-0e58-4825-a924-a9dfc6ff4062)
 
+We defang the url using CyberChef for our report. 
+
 ![image](https://github.com/user-attachments/assets/07c7236b-7edd-447a-8165-a90e5d4fbd0e)
+
+**Step 04:** It is now time to investigate the potentially malicious files. The command ``` zeek -Cr phishing.pcap hash-demo.zeek``` is now run. This script will create hashes for the embedded files that I can search through to continue my investigation.
 
 ![image](https://github.com/user-attachments/assets/d9bbbba4-0211-4afa-83ed-a672339903df)
 
+The MD5 has for the word document is entered into the VirusTotal database. There is a hit! It is a known malicious hash. Going further into the Relations tab shows me the file type is a VBA file. VBA macros are a common way for malicious actors to gain access to deploy malware and ransomware.
+
 ![image](https://github.com/user-attachments/assets/f95f8f09-2f1f-484a-a6d7-69afbd8c9918)
+
+**Step 05:** Next I search the MD5 hash for the executable file in the packet payload in Virus Total. Another hit! This is a known malicious file. It has the moniker "PleaseWaitWindow.exe".
 
 ![image](https://github.com/user-attachments/assets/a199bd7a-2758-4993-a292-b626bc2f5969)
 
+**Step 06:** The "Behavior" tab shows the exe file commonly resolves to the malicious domain hopto[.]org.
+
 ![image](https://github.com/user-attachments/assets/e3888996-6316-43c2-852f-c69bbf12cbd4)
 
+Again I defange the url for my report using CyberChef.
+
 ![image](https://github.com/user-attachments/assets/02f53fc3-51cd-4946-b132-e27da01bb13f)
+
+**Step 07:** One last look into the packet using the command ```cat http.log | zeek-cut host uri resp_mime_types``` reveals this malicious file had the refferd name of "knr.exe"
 
 ![image](https://github.com/user-attachments/assets/e049a5f4-c337-4e0d-a922-cf0bec50bccc)
 

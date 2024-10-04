@@ -99,7 +99,7 @@ Again I defange the url for my report using CyberChef.
 
 ![image](https://github.com/user-attachments/assets/e049a5f4-c337-4e0d-a922-cf0bec50bccc)
 
-This is the end of the investigation
+This is the end of the second investigation.
 
 ## Scenario 3: Log4J
 *An alert was triggered: "Log4J Exploitation Attempt". The case was issued to me. Inspect the PCAP and retrieve artifacts to show if it is a true positive*
@@ -113,6 +113,27 @@ The command ```cat signatures.log | zeek-cut note sig_id event_msg | nl``` is us
 ![image](https://github.com/user-attachments/assets/3a76165e-b75f-4b39-b165-1dcf83decccc)
 
 **Step 02:**
+Now we will look into the ```http.log``` file to see which tool is used for scanning. We want to look at the user agent information. ```cat http.log | zeek-cut user_agent``` and we can clearly see Nmap was the tool of choice.
+
+![image](https://github.com/user-attachments/assets/1feb153a-af51-4792-9a92-f696404ff9d9)
+
+**Step 03:** We will now discover the type of file extension that the exploit file is using. ```cat http.log | zeek-cut uri | sort -bu ``` will sort through the results. ```-b``` will ignore blank entries and ```-u``` will only list unique entries. The findings show it is a ```.class``` file.
+
+![image](https://github.com/user-attachments/assets/a1530e0e-026a-45f0-95f0-0f69882aa808)
+
+**Step 04:** Finally it is time to look into the ```log4j.log``` file for information. Another look into the uri field shows something interesting: 
+
+![image](https://github.com/user-attachments/assets/fda8e19f-7d41-4c5e-a303-31583510eeb4)
+
+There are Base64 lines found. The information is copied and translated in CyberChef: 
+
+![image](https://github.com/user-attachments/assets/c25cfd9c-30b9-4a65-85c0-42b1da9f2ddf)
+
+These commands create a file of the destination host called "pwned." 
+
+This concludes the third investigation and the Zeek Exercises are complete.
+
+
 
 
 

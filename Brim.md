@@ -1,1 +1,4 @@
+# Brim Exercises (TryHackMe)
+
+## Premise
 
